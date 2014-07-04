@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2013 for Web
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOAPtoREST", "SOAPtoREST\SOAPtoREST.csproj", "{BBB18565-10B9-4F3D-B789-D27DF7EAE178}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PublishScripts", "PublishScripts", "{3A351A90-14C7-4D2B-815D-A1AFAF375D34}"
+	ProjectSection(SolutionItems) = preProject
+		PublishScripts\AzureWebAppPublishModule.psm1 = PublishScripts\AzureWebAppPublishModule.psm1
+		PublishScripts\Publish-WebApplication.ps1 = PublishScripts\Publish-WebApplication.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configurations", "{A1C42D52-A926-4CBF-AF32-105BC554323C}"
+	ProjectSection(SolutionItems) = preProject
+		PublishScripts\Configurations\SOAPtoREST-WAWS-dev.json = PublishScripts\Configurations\SOAPtoREST-WAWS-dev.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BBB18565-10B9-4F3D-B789-D27DF7EAE178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBB18565-10B9-4F3D-B789-D27DF7EAE178}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBB18565-10B9-4F3D-B789-D27DF7EAE178}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBB18565-10B9-4F3D-B789-D27DF7EAE178}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A1C42D52-A926-4CBF-AF32-105BC554323C} = {3A351A90-14C7-4D2B-815D-A1AFAF375D34}
+	EndGlobalSection
+EndGlobal
