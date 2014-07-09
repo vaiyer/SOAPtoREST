@@ -16,33 +16,29 @@ namespace SOAPtoREST
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            
-            JsonSerializer serializer = new JsonSerializer();
             var file = HostingEnvironment.MapPath("~/map.json");
-            JObject o = (JObject)serializer.Deserialize(new JsonTextReader(new StreamReader(file)));
-            JArray a = (JArray)o.GetValue("mappings");
+            var fileJson = File.ReadAllText(file);
+            var mappingsFile = JObject.Parse(fileJson);
 
-            // Web API routes
-            /*config.MapHttpAttributeRoutes();
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }*/
+            int routeNum = 1;
+            foreach (dynamic mapping in mappingsFile.Value<JArray>("mappings"))            
+            {
+                string routeTemplate = mapping.routeTemplate;
+                config.Routes.MapHttpRoute(
+                    name: "DynamicSoapToRestRoute" + routeNum,
+                    routeTemplate: routeTemplate,
+                    defaults: new
+                    {
+                        controller = "SOAPREST",
+                        action = "Handler",
+                        routeTemplate = routeTemplate
+                    },
+                    constraints: new {
+                        httpMethod = new HttpMethodConstraint(new HttpMethod((string)mapping.method))
+                    });
 
-            config.Routes.MapHttpRoute(
-              name: "Default",
-              routeTemplate: "api/{controller}/{op}",
-              defaults: new
-              {
-                  controller = "SOAPREST",
-                  action = "Handler",
-              },
-              constraints: new
-              {
-                  httpMethod = new HttpMethodConstraint(HttpMethod.Post)
-              }
-
-            );
+                routeNum++;
+            }
         }
     }
 }

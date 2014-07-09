@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
 
@@ -14,32 +16,59 @@ namespace SOAPtoREST.Controllers
     public class SOAPRESTController : ApiController
     {
         [HttpDelete, HttpHead, HttpOptions, HttpPatch, HttpPut, HttpPost, HttpGet]
-        public HttpResponseMessage Handler(HttpRequestMessage request)
+        public async Task<IHttpActionResult> Handler(string routeTemplate, HttpRequestMessage request)
         {
-            JsonSerializer serializer = new JsonSerializer();
             var file = HostingEnvironment.MapPath("~/map.json");
-            JObject o = (JObject)serializer.Deserialize(new JsonTextReader(new StreamReader(file)));
-            JArray a = (JArray)o.GetValue("mappings");
+            var fileJson = File.ReadAllText(file);
+            var mappingsFile = JObject.Parse(fileJson);
+
+            // go thru all mappings, find the one with the route template that matches this request
+            var mapping = mappingsFile.Value<JArray>("mappings")
+                                      .FirstOrDefault((dynamic m) => m.routeTemplate == routeTemplate);
 
             var routeData = request.GetRouteData();
 
-            var exampleBody = "";
-            /*foreach (var ex in a)
+            var body = (string)mapping.body;
+            foreach (var kvp in routeData.Values)
             {
-                if (routeData == o.GetValue(){
-                    exampleBody
-                }
-            }*/
-
-            foreach(var kvp in routeData.Values)
-            {
-                exampleBody = exampleBody.Replace("{" + kvp.Key + "}", kvp.Value as string);
+                body = body.Replace("{" + kvp.Key + "}", kvp.Value as string);
             }
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK);
-            response.Content = new StringContent(exampleBody);
+            var action = (string)mapping.soapAction;
+            var url = (string)mapping.soapUrl;
+            var contentType = (string)mapping.contentType;
 
-            return response;
+            //var response = new HttpResponseMessage(HttpStatusCode.OK);
+            //response.Content = new StringContent(body);
+
+            string oRequest = body;
+            using (var client = new HttpClient())
+            {
+                var requestContent = new StringContent(oRequest)
+                {
+                    Headers = { ContentType = new MediaTypeHeaderValue(contentType) }
+                };
+
+                requestContent.Headers.TryAddWithoutValidation("SOAPAction", action);
+
+                using (var response = await client.PostAsync(url, requestContent))
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    var outgoingResponse = new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = new StringContent(responseContent)
+                        {
+                            Headers =
+                            {
+                                ContentType = new MediaTypeHeaderValue(contentType)
+                            }
+                        }
+                    };
+
+                    return this.ResponseMessage(outgoingResponse);
+                }
+            }
         }
     }
 }

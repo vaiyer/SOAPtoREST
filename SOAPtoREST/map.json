@@ -2,13 +2,13 @@
 	"mappings" : [
 		{
 		"method" : "GET",
-		"routeTemplate" : "getCityWeatherByZip/{ZIP}",
+		"routeTemplate" : "city/weather/{ZIP}",
 		"soapAction" : "http://ws.cdyne.com/WeatherWS/GetCityWeatherByZIP",
 		"body" : "<?xml version=\"1.0\" encoding=\"utf-8\"?>
             <soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">
                 <soap:Body>
                     <GetCityWeatherByZIP xmlns=\"http://ws.cdyne.com/WeatherWS/\">
-                        <ZIP>{0}</ZIP>
+                        <ZIP>{ZIP}</ZIP>
                     </GetCityWeatherByZIP>
                 </soap:Body>
             </soap:Envelope>",
@@ -18,7 +18,7 @@
 		},
 		{
 		"method" : "GET",
-		"routeTemplate" : "getWeatherInformation",
+		"routeTemplate" : "getweatherinformation",
 		"soapAction" : "http://ws.cdyne.com/WeatherWS/GetWeatherInformation",
 		"body" : "<?xml version=\"1.0\" encoding=\"utf-8\"?>
             <soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">
@@ -37,7 +37,7 @@
             <soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">
                 <soap:Body>
                     <GetCityForecastByZIP xmlns=\"http://ws.cdyne.com/WeatherWS/\">
-                        <ZIP>{0}</ZIP>
+                        <ZIP>{ZIP}</ZIP>
                     </GetCityForecastByZIP>
                 </soap:Body>
             </soap:Envelope>",
