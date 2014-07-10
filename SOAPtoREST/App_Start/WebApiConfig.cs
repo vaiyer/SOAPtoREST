@@ -29,7 +29,7 @@ namespace SOAPtoREST
                     routeTemplate: routeTemplate,
                     defaults: new
                     {
-                        controller = "SOAPREST",
+                        controller = "SoapRest",
                         action = "Handler",
                         routeTemplate = routeTemplate
                     },

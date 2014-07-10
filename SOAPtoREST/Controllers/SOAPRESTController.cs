@@ -13,7 +13,7 @@ using System.Web.Http;
 
 namespace SOAPtoREST.Controllers
 {
-    public class SOAPRESTController : ApiController
+    public class SoapRestController : ApiController
     {
         [HttpDelete, HttpHead, HttpOptions, HttpPatch, HttpPut, HttpPost, HttpGet]
         public async Task<IHttpActionResult> Handler(string routeTemplate, HttpRequestMessage request)

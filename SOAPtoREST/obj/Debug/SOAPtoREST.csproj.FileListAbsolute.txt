@@ -30,3 +30,35 @@ c:\users\administrator\documents\visual studio 2013\Projects\SOAPtoREST\SOAPtoRE
 c:\users\administrator\documents\visual studio 2013\Projects\SOAPtoREST\SOAPtoREST\obj\Debug\SOAPtoREST.csprojResolveAssemblyReference.cache
 c:\users\administrator\documents\visual studio 2013\Projects\SOAPtoREST\SOAPtoREST\obj\Debug\SOAPtoREST.dll
 c:\users\administrator\documents\visual studio 2013\Projects\SOAPtoREST\SOAPtoREST\obj\Debug\SOAPtoREST.pdb
+C:\projects\SOAPtoREST\SOAPtoREST\bin\SOAPtoREST.dll.config
+C:\projects\SOAPtoREST\SOAPtoREST\bin\SOAPtoREST.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\SOAPtoREST.pdb
+C:\projects\SOAPtoREST\SOAPtoREST\bin\Antlr3.Runtime.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\Microsoft.Web.Infrastructure.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\Newtonsoft.Json.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Net.Http.Formatting.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.Helpers.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.Http.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.Http.WebHost.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.Mvc.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.Optimization.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.Razor.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.WebPages.Deployment.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.WebPages.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.WebPages.Razor.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\WebGrease.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\Newtonsoft.Json.xml
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Net.Http.Formatting.xml
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.Helpers.xml
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.Http.xml
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.Http.WebHost.xml
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.Mvc.xml
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.Optimization.xml
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.Razor.xml
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.WebPages.xml
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.WebPages.Deployment.xml
+C:\projects\SOAPtoREST\SOAPtoREST\bin\System.Web.WebPages.Razor.xml
+C:\projects\SOAPtoREST\SOAPtoREST\bin\Antlr3.Runtime.pdb
+C:\projects\SOAPtoREST\SOAPtoREST\obj\Debug\SOAPtoREST.csprojResolveAssemblyReference.cache
+C:\projects\SOAPtoREST\SOAPtoREST\obj\Debug\SOAPtoREST.dll
+C:\projects\SOAPtoREST\SOAPtoREST\obj\Debug\SOAPtoREST.pdb
