@@ -23,7 +23,7 @@ namespace SOAPtoREST
             int routeNum = 1;
             foreach (dynamic mapping in mappingsFile.Value<JArray>("mappings"))            
             {
-                string routeTemplate = mapping.routeTemplate;
+                string routeTemplate = (string)mapping.routeTemplate;
                 config.Routes.MapHttpRoute(
                     name: "DynamicSoapToRestRoute" + routeNum,
                     routeTemplate: routeTemplate,
@@ -34,7 +34,7 @@ namespace SOAPtoREST
                         routeTemplate = routeTemplate
                     },
                     constraints: new {
-                        httpMethod = new HttpMethodConstraint(new HttpMethod((string)mapping.method))
+                        //httpMethod = new HttpMethodConstraint(new HttpMethod((string)mapping.method))
                     });
 
                 routeNum++;

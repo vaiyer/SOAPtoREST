@@ -16,17 +16,17 @@ namespace SOAPtoREST.Controllers
     public class SOAPRESTController : ApiController
     {
         [HttpDelete, HttpHead, HttpOptions, HttpPatch, HttpPut, HttpPost, HttpGet]
-        public async Task<IHttpActionResult> Handler(string routeTemplate, HttpRequestMessage request)
+        public async Task<System.Net.Http.HttpResponseMessage> Handler( HttpRequestMessage request)
         {
             var file = HostingEnvironment.MapPath("~/map.json");
             var fileJson = File.ReadAllText(file);
             var mappingsFile = JObject.Parse(fileJson);
+            var routeData = request.GetRouteData();
+            string routeTemplate = (string)request.GetRouteData().Values["routeTemplate"];
 
             // go thru all mappings, find the one with the route template that matches this request
             var mapping = mappingsFile.Value<JArray>("mappings")
                                       .FirstOrDefault((dynamic m) => m.routeTemplate == routeTemplate);
-
-            var routeData = request.GetRouteData();
 
             var body = (string)mapping.body;
             foreach (var kvp in routeData.Values)
@@ -66,7 +66,7 @@ namespace SOAPtoREST.Controllers
                         }
                     };
 
-                    return this.ResponseMessage(outgoingResponse);
+                    return outgoingResponse;
                 }
             }
         }
