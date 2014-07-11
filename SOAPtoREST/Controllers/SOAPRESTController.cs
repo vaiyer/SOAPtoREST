@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SOAPtoREST.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +16,13 @@ namespace SOAPtoREST.Controllers
 {
     public class SoapRestController : ApiController
     {
+        private MapProvider _mapProvider;
+
+        public SoapRestController (MapProvider mapProvider)
+	    {
+            _mapProvider = mapProvider;
+	    }
+
         [HttpDelete, HttpHead, HttpOptions, HttpPatch, HttpPut, HttpPost, HttpGet]
         public async Task<IHttpActionResult> Handler(string routeTemplate, HttpRequestMessage request)
         {

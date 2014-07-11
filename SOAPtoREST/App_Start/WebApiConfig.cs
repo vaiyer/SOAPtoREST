@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SOAPtoREST.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,15 +16,12 @@ namespace SOAPtoREST
     {
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
-            var file = HostingEnvironment.MapPath("~/map.json");
-            var fileJson = File.ReadAllText(file);
-            var mappingsFile = JObject.Parse(fileJson);
+            MapProvider mp = new MapProvider("~/map.json");
 
             int routeNum = 1;
-            foreach (dynamic mapping in mappingsFile.Value<JArray>("mappings"))            
+            foreach (var mapping in mp.Mappings)            
             {
-                string routeTemplate = mapping.routeTemplate;
+                string routeTemplate = mapping.RouteTemplate;
                 config.Routes.MapHttpRoute(
                     name: "DynamicSoapToRestRoute" + routeNum,
                     routeTemplate: routeTemplate,
@@ -34,7 +32,7 @@ namespace SOAPtoREST
                         routeTemplate = routeTemplate
                     },
                     constraints: new {
-                        httpMethod = new HttpMethodConstraint(new HttpMethod((string)mapping.method))
+                        httpMethod = new HttpMethodConstraint(new HttpMethod(mapping.Method))
                     });
 
                 routeNum++;

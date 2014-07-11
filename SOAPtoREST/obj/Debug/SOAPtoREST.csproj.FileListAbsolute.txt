@@ -62,3 +62,7 @@ C:\projects\SOAPtoREST\SOAPtoREST\bin\Antlr3.Runtime.pdb
 C:\projects\SOAPtoREST\SOAPtoREST\obj\Debug\SOAPtoREST.csprojResolveAssemblyReference.cache
 C:\projects\SOAPtoREST\SOAPtoREST\obj\Debug\SOAPtoREST.dll
 C:\projects\SOAPtoREST\SOAPtoREST\obj\Debug\SOAPtoREST.pdb
+C:\projects\SOAPtoREST\SOAPtoREST\bin\Autofac.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\Autofac.Integration.Mvc.dll
+C:\projects\SOAPtoREST\SOAPtoREST\bin\Autofac.xml
+C:\projects\SOAPtoREST\SOAPtoREST\bin\Autofac.Integration.Mvc.xml
