@@ -27,7 +27,7 @@ namespace SOAPtoREST.Models
         public void Save(string path)
         {
             var json = JsonConvert.SerializeObject(new SoapMap() { Mappings = this.Mappings });
-            File.WriteAllText(path, json);
+            File.WriteAllText(HostingEnvironment.MapPath(path), json);
         }
 
         public List<Mapping> Mappings;

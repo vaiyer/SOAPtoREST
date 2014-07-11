@@ -17,26 +17,23 @@ namespace SOAPtoREST
     {
         public static void Register(HttpConfiguration config)
         {
-            MapProvider mp = DependencyResolver.Current.GetService<MapProvider>();
+            // Web API routes
+            //config.MapHttpAttributeRoutes();
 
-            int routeNum = 1;
-            foreach (var mapping in mp.Mappings)            
-            {
-                string routeTemplate = mapping.RouteTemplate;
-                config.Routes.MapHttpRoute(
-                    name: "DynamicSoapToRestRoute" + routeNum,
-                    routeTemplate: routeTemplate,
-                    defaults: new
-                    {
-                        controller = "SoapRest",
-                        action = "Handler"
-                    },
-                    constraints: new {
-                        httpMethod = new HttpMethodConstraint(new HttpMethod(mapping.Method))
-                    });
+            //config.Routes.MapHttpRoute(
+            //    name: "DefaultApi",
+            //    routeTemplate: "api/{controller}/{id}",
+            //    defaults: new { id = RouteParameter.Optional }
+            //);
 
-                routeNum++;
-            }
+            config.Routes.MapHttpRoute(
+                name: "ManageMapApi",
+                routeTemplate: "map",
+                defaults: new
+                {
+                    controller = "ManageMap",
+                    id = RouteParameter.Optional,
+                });
         }
     }
 }
