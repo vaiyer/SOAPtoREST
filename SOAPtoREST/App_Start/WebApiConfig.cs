@@ -24,6 +24,34 @@ namespace SOAPtoREST
             foreach (dynamic mapping in mappingsFile.Value<JArray>("mappings"))            
             {
                 string routeTemplate = (string)mapping.routeTemplate;
+                string met = (string)mapping.method;
+                HttpMethod method = null;
+                if(met.Equals("GET")){
+                    method = HttpMethod.Get;
+                }
+                else if(met.Equals("DELETE")){
+                    method = HttpMethod.Delete;
+                }
+                else if (met.Equals("HEAD"))
+                {
+                    method = HttpMethod.Head;
+                }
+                else if (met.Equals("OPTIONS"))
+                {
+                    method = HttpMethod.Options;
+                }
+                else if (met.Equals("POST"))
+                {
+                    method = HttpMethod.Post;
+                }
+                else if (met.Equals("PUT"))
+                {
+                    method = HttpMethod.Put;
+                }
+                else if (met.Equals("TRACE"))
+                {
+                    method = HttpMethod.Trace;
+                }
                 config.Routes.MapHttpRoute(
                     name: "DynamicSoapToRestRoute" + routeNum,
                     routeTemplate: routeTemplate,
@@ -34,7 +62,7 @@ namespace SOAPtoREST
                         routeTemplate = routeTemplate
                     },
                     constraints: new {
-                        //httpMethod = new HttpMethodConstraint(new HttpMethod((string)mapping.method))
+                        httpMethod = new HttpMethodConstraint(method)
                     });
 
                 routeNum++;
