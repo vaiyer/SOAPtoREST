@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Http.Routing;
+using System.Web.Mvc;
 
 namespace SOAPtoREST
 {
@@ -16,7 +17,7 @@ namespace SOAPtoREST
     {
         public static void Register(HttpConfiguration config)
         {
-            MapProvider mp = new MapProvider("~/map.json");
+            MapProvider mp = DependencyResolver.Current.GetService<MapProvider>();
 
             int routeNum = 1;
             foreach (var mapping in mp.Mappings)            
@@ -28,8 +29,7 @@ namespace SOAPtoREST
                     defaults: new
                     {
                         controller = "SoapRest",
-                        action = "Handler",
-                        routeTemplate = routeTemplate
+                        action = "Handler"
                     },
                     constraints: new {
                         httpMethod = new HttpMethodConstraint(new HttpMethod(mapping.Method))

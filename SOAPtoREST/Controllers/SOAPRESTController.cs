@@ -16,38 +16,40 @@ namespace SOAPtoREST.Controllers
 {
     public class SoapRestController : ApiController
     {
-        private MapProvider _mapProvider;
+        private MapProvider mapProvider;
 
-        public SoapRestController (MapProvider mapProvider)
+        public SoapRestController()
 	    {
-            _mapProvider = mapProvider;
+            // TODO - This should really use constructor injection but couldn't get that working.
+            this.mapProvider = (MapProvider)System.Web.Mvc.DependencyResolver.Current.GetService(typeof(MapProvider));
 	    }
 
         [HttpDelete, HttpHead, HttpOptions, HttpPatch, HttpPut, HttpPost, HttpGet]
-        public async Task<IHttpActionResult> Handler(string routeTemplate, HttpRequestMessage request)
+        public async Task<System.Net.Http.HttpResponseMessage> Handler(HttpRequestMessage request)
         {
-            var file = HostingEnvironment.MapPath("~/map.json");
-            var fileJson = File.ReadAllText(file);
-            var mappingsFile = JObject.Parse(fileJson);
+            var routeData = request.GetRouteData();
+            string routeTemplate = routeData.Route.RouteTemplate;
 
             // go thru all mappings, find the one with the route template that matches this request
-            var mapping = mappingsFile.Value<JArray>("mappings")
-                                      .FirstOrDefault((dynamic m) => m.routeTemplate == routeTemplate);
+            var mapping = this.mapProvider.Mappings.FirstOrDefault(m => m.RouteTemplate == routeTemplate);
 
-            var routeData = request.GetRouteData();
+            if (mapping == null)
+            {
+                throw new InvalidOperationException(string.Format(
+                    "No matching routeTemplate found for '{0}' from '{1}' mapping(s)",
+                    routeTemplate,
+                    mapProvider.Mappings.Count));
+            }
 
-            var body = (string)mapping.body;
+            var body = (string)mapping.SoapBody;
             foreach (var kvp in routeData.Values)
             {
                 body = body.Replace("{" + kvp.Key + "}", kvp.Value as string);
             }
 
-            var action = (string)mapping.soapAction;
-            var url = (string)mapping.soapUrl;
-            var contentType = (string)mapping.contentType;
-
-            //var response = new HttpResponseMessage(HttpStatusCode.OK);
-            //response.Content = new StringContent(body);
+            var action = mapping.SoapAction;
+            var url = mapping.SoapUrl;
+            var contentType = mapping.ContentType;
 
             string oRequest = body;
             using (var client = new HttpClient())
@@ -74,7 +76,7 @@ namespace SOAPtoREST.Controllers
                         }
                     };
 
-                    return this.ResponseMessage(outgoingResponse);
+                    return outgoingResponse;
                 }
             }
         }
