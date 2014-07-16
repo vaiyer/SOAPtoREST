@@ -16,6 +16,7 @@ namespace SoapToRest
         {
             new Bootstrap().Configure();
 
+            
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             GlobalConfiguration.Configure(SoapToRestApiConfig.Register);

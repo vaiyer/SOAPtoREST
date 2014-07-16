@@ -13,11 +13,10 @@
         </div>
 
         <div ng-repeat="mapping in mappings">
-            @{/* TODO - P2 - fix the web api to return camel cased JSON (duh!) */}
-            <input type="text" ng-model="mapping.Method" style="width:80px" />
-            <input type="text" ng-model="mapping.RouteTemplate" style="width:300px" />
-            <input type="text" ng-model="mapping.SoapAction" style="width:300px" />
-            <input type="text" ng-model="mapping.SoapUrl" style="width:300px" />
+            <input type="text" ng-model="mapping.method" style="width:80px" />
+            <input type="text" ng-model="mapping.routeTemplate" style="width:300px" />
+            <input type="text" ng-model="mapping.soapAction" style="width:300px" />
+            <input type="text" ng-model="mapping.soapUrl" style="width:300px" />
         </div>
 
         <div>
@@ -56,6 +55,7 @@
         $scope.readWsdl = function () {
             $scope.loading = true;
             alert('this is not implemented yet, but when it is it will pass the URL to the API and that will regenerate the whole map');
+            $scope.loading = false;
         }
 
         $scope.newMap = function () {
@@ -66,7 +66,7 @@
             $scope.loading = true;
             $http({ method: 'PUT', url: '/map', data: $scope.mappings }).
             success(function (data, status, headers, config) {
-                alert('Saved (well, in memory for now, you can persist later)')
+                alert('Saved (in memory, for now)')
                 $scope.loading = false;
             }).
            error(function (data, status, headers, config) {
