@@ -1,4 +1,4 @@
-﻿using SOAPtoREST.Models;
+﻿using SoapToRest.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-namespace SOAPtoREST.Controllers
+namespace SoapToRest.Controllers
 {
     public class ManageMapController : ApiController
     {

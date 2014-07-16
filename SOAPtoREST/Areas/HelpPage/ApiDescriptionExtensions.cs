@@ -3,7 +3,7 @@ using System.Text;
 using System.Web;
 using System.Web.Http.Description;
 
-namespace SOAPtoREST.Areas.HelpPage
+namespace SoapToRest.Areas.HelpPage
 {
     public static class ApiDescriptionExtensions
     {

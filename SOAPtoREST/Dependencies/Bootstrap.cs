@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
-using SOAPtoREST.Models;
+using SoapToRest.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
-namespace SOAPtoREST.Dependencies
+namespace SoapToRest.Dependencies
 {
     public class Bootstrap
     {

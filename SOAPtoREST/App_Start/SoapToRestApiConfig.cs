@@ -1,4 +1,4 @@
-﻿using SOAPtoREST.Models;
+﻿using SoapToRest.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Web.Http;
 using System.Web.Http.Routing;
 using System.Web.Mvc;
 
-namespace SOAPtoREST
+namespace SoapToRest
 {
     public class SoapToRestApiConfig
     {

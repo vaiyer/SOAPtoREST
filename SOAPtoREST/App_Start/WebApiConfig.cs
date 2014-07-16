@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SOAPtoREST.Models;
+using SoapToRest.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Routing;
 using System.Web.Mvc;
 
-namespace SOAPtoREST
+namespace SoapToRest
 {
     public static class WebApiConfig
     {

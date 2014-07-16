@@ -1,7 +1,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace SOAPtoREST.Areas.HelpPage
+namespace SoapToRest.Areas.HelpPage
 {
     public class HelpPageAreaRegistration : AreaRegistration
     {

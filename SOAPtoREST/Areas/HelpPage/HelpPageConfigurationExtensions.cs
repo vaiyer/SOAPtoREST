@@ -7,9 +7,9 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Description;
-using SOAPtoREST.Areas.HelpPage.Models;
+using SoapToRest.Areas.HelpPage.Models;
 
-namespace SOAPtoREST.Areas.HelpPage
+namespace SoapToRest.Areas.HelpPage
 {
     public static class HelpPageConfigurationExtensions
     {

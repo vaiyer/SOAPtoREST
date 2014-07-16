@@ -1,9 +1,9 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using SOAPtoREST.Areas.HelpPage.Models;
+using SoapToRest.Areas.HelpPage.Models;
 
-namespace SOAPtoREST.Areas.HelpPage.Controllers
+namespace SoapToRest.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.

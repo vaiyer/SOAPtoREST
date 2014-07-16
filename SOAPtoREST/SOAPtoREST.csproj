@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SOAPtoREST</RootNamespace>
-    <AssemblyName>SOAPtoREST</AssemblyName>
+    <RootNamespace>SoapToRest</RootNamespace>
+    <AssemblyName>SoapToRest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -149,6 +149,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\MappedRouteProvider.cs" />
     <Compile Include="Models\Mapping.cs" />
     <Compile Include="Models\MapProvider.cs" />
     <Compile Include="Models\SoapMap.cs" />

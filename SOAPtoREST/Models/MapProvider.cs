@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 
-namespace SOAPtoREST.Models
+namespace SoapToRest.Models
 {
     public class MapProvider
     {
