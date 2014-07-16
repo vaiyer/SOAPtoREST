@@ -4,20 +4,57 @@
 }
 
 <h2>Manage</h2>
-<div ng-app="manageApp">
+<div ng-app="manageApp" class="container">
     <div ng-controller="manageController">
         <div class="jumbotron">
             <h1>Import WSDL</h1>
             <p>Enter WSDL URL:</p>
-            <input type="text" ng-model="wsdlUrl" /> <button ng-click="readWsdl()">Load WSDL</button>
+            <form role="form">
+                <input type="text" ng-model="wsdlUrl" placeholder="Enter WSDL URL here" /> <button ng-click="readWsdl()">Load WSDL</button>
+            </form>
         </div>
 
-        <div ng-repeat="mapping in mappings">
-            <input type="text" ng-model="mapping.method" style="width:80px" />
-            <input type="text" ng-model="mapping.routeTemplate" style="width:300px" />
-            <input type="text" ng-model="mapping.soapAction" style="width:300px" />
-            <input type="text" ng-model="mapping.soapUrl" style="width:300px" />
-        </div>
+        <form role="form">
+            <div ng-repeat="mapping in mappings">
+                <div class="row">
+                    <label class="col-md-2">Method</label>
+                    <label class="col-md-8">RouteTemplate</label>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" ng-model="mapping.method" />
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" ng-model="mapping.routeTemplate" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-4">SOAP URL</label>
+                    <label class="col-md-4">SOAP Action</label>
+                    <label class="col-md-4">SOAP Content-Type</label>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" ng-model="mapping.soapUrl"/>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" ng-model="mapping.soapAction " />
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" ng-model="mapping.contentType" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-12">SOAP BODY</label>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <textarea class="form-control" rows="4" ng-model="mapping.soapBody"></textarea>
+                    </div>
+                </div>
+                <p>&nbsp;</p>
+            </div>
+        </form>
 
         <div>
             <button ng-click="newMap()">Add new map</button>
@@ -39,7 +76,7 @@
 
         // initial state
         $scope.loading = true;
-        $scope.wsdlUrl = "Enter WSDL URL here";
+        $scope.wsdlUrl = "";
 
         $http({ method: 'GET', url: '/map' }).
             success(function (data, status, headers, config) {
