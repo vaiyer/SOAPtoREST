@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2013 for Web
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOAPtoREST", "SOAPtoREST\SOAPtoREST.csproj", "{BBB18565-10B9-4F3D-B789-D27DF7EAE178}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoapToRest", "SoapToRest\SoapToRest.csproj", "{BBB18565-10B9-4F3D-B789-D27DF7EAE178}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PublishScripts", "PublishScripts", "{3A351A90-14C7-4D2B-815D-A1AFAF375D34}"
 	ProjectSection(SolutionItems) = preProject
