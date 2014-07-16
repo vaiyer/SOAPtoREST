@@ -11,10 +11,12 @@ namespace SoapToRest.Controllers
     public class ManageMapController : ApiController
     {
         private MapProvider mapProvider;
+        private MappedRoute mappedRoute;
 
         public ManageMapController()
         {
             this.mapProvider = (MapProvider) System.Web.Mvc.DependencyResolver.Current.GetService(typeof(MapProvider));
+            this.mappedRoute = (MappedRoute)System.Web.Mvc.DependencyResolver.Current.GetService(typeof(MappedRoute));
         }
 
         // GET api/managemap
@@ -30,16 +32,13 @@ namespace SoapToRest.Controllers
             // This is a little hacky, but will do for now - ideally this should 
             // be organized in the DI container too. And use of global state is bad and inconsistent.
             // This code clears the old routes...
-            // TODO - how to remove routes at runtime
-            // NOT WORKING: SoapToRestApiConfig.Deregister();
 
             // then we update the map
             this.mapProvider.Mappings = mappings;
 
-            // And re-register the routes! HACKy code.
-            SoapToRestApiConfig.Register();
-            
-            // when confident, save over original location :)
+            this.mappedRoute.SetMappedRoutes(mappings);
+
+            // TODO when confident, save over original location :)
             this.mapProvider.Save("~/map1.json");
 
             return new HttpResponseMessage(HttpStatusCode.OK);

@@ -144,12 +144,11 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageMapController.cs" />
     <Compile Include="Controllers\SoapRestController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Dependencies\Bootstrap.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\MappedRouteProvider.cs" />
+    <Compile Include="Models\MappedRoute.cs" />
     <Compile Include="Models\Mapping.cs" />
     <Compile Include="Models\MapProvider.cs" />
     <Compile Include="Models\SoapMap.cs" />

@@ -41,7 +41,9 @@ namespace SoapToRest.Dependencies
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
             //The line below tells autofac, everytime an implementation IDAL is needed, pass in an instance of the class DAL
-            builder.RegisterInstance(new MapProvider("~/map.json")).As<MapProvider>();    
+            builder.RegisterInstance(new MapProvider("~/map.json")).As<MapProvider>();
+
+            builder.RegisterInstance(new MappedRoute()).As<MappedRoute>();
         }
     }
 }
