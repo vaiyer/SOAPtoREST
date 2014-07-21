@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace SOAPtoREST.Models
+namespace SoapToRest.Models
 {
     public class Mapping
     {

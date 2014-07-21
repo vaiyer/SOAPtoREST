@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
-using SOAPtoREST.Models;
+using SoapToRest.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
-namespace SOAPtoREST.Dependencies
+namespace SoapToRest.Dependencies
 {
     public class Bootstrap
     {
@@ -41,7 +41,9 @@ namespace SOAPtoREST.Dependencies
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
             //The line below tells autofac, everytime an implementation IDAL is needed, pass in an instance of the class DAL
-            builder.RegisterInstance(new MapProvider("~/map.json")).As<MapProvider>();    
+            builder.RegisterInstance(new MapProvider("~/map.json")).As<MapProvider>();
+
+            builder.RegisterInstance(new MappedRoute()).As<MappedRoute>();
         }
     }
 }

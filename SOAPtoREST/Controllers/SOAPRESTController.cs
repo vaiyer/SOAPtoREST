@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SOAPtoREST.Models;
+using SoapToRest.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
 
-namespace SOAPtoREST.Controllers
+namespace SoapToRest.Controllers
 {
     public class SoapRestController : ApiController
     {
