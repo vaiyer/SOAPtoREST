@@ -48,11 +48,13 @@ namespace SoapToRest.Models
                             nextMap.Method = "DELETE";
                         }
                         nextMap.RouteTemplate = "" + op.Name;
+                        string allParams = "";
                         List<Parameter> parameters = this.getParameters(backEnd, msg.Operation.Name);
                         foreach(Parameter p in parameters){
                             nextMap.RouteTemplate = nextMap.RouteTemplate + "/{" + p.Name + "}";
+                            allParams = allParams + "<" + p.Name + ">{" + p.Name + "}</" + p.Name + ">";
                         }
-                        nextMap.SoapBody = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body></soap:Body></soap:Envelope>";
+                        nextMap.SoapBody = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body>" + allParams + "</soap:Body></soap:Envelope>";
                         nextMap.SoapAction = "http://ws.cdyne.com/WeatherWS/" + nextMap.RouteTemplate;
                         nextMap.SoapUrl = soapUrl;
                         nextMap.ContentType = "text/xml";
