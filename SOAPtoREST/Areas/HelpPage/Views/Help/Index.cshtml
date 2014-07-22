@@ -7,6 +7,7 @@
 
 @{
     ViewBag.Title = "ASP.NET Web API Help Page";
+    var WadlUrl = Url.Content("~/Help/WADL");
 
     // Group APIs by controller
     ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
@@ -24,7 +25,7 @@
         <div class="content-wrapper">
             <h2>Introduction</h2>
             <p>
-                Provide a general description of your APIs here.
+                Get some <a href="@WadlUrl">WADL</a>!
             </p>
         </div>
     </section>
