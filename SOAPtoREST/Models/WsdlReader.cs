@@ -18,6 +18,23 @@ namespace SoapToRest.Models
             List<Mapping> fullMap = new List<Mapping>();
             XmlTextReader reader = new XmlTextReader(wsdl);
             ServiceDescription backEnd = ServiceDescription.Read(reader);
+            /*
+            foreach (Binding bdg in backEnd.Bindings)
+            {
+                var ext = bdg.Extensions.OfType<Soap12Binding>().FirstOrDefault();
+                if (ext == null)
+                {
+                    throw new NullReferenceException();
+                }
+                foreach (Operation ops in bdg.Operations)
+                {
+                    Mapping nextMap = new Mapping();
+                    nextMap.Name = ops.Name;
+                    nextMap.SoapAction = ops.
+                }
+                
+            }
+            */
             foreach(PortType pt in backEnd.PortTypes)
             {
                 foreach (Operation op in pt.Operations)
@@ -31,19 +48,19 @@ namespace SoapToRest.Models
                         {
                             nextMap.Method = "GET";
                         }
-                        else if (op.ToString().Contains("post"))
+                        else if (op.ToString().Contains("post") || op.ToString().Contains("Post") || op.ToString().Contains("POST"))
                         {
                             nextMap.Method = "POST";
                         }
-                        else if (op.ToString().Contains("put"))
+                        else if (op.ToString().Contains("put") || op.ToString().Contains("Put") || op.ToString().Contains("PUT"))
                         {
                             nextMap.Method = "PUT";
                         }
-                        else if (op.ToString().Contains("patch"))
+                        else if (op.ToString().Contains("patch") || op.ToString().Contains("Patch") || op.ToString().Contains("PATCH"))
                         {
                             nextMap.Method = "PATCH";
                         }
-                        else if (op.ToString().Contains("delete"))
+                        else if (op.ToString().Contains("delete") || op.ToString().Contains("Delete") || op.ToString().Contains("DELETE"))
                         {
                             nextMap.Method = "DELETE";
                         }
