@@ -12,20 +12,22 @@ namespace SoapToRest.Models
 {
     public class WsdlReader
     {
-        
-        public List<Mapping> returnOps (string wsdl, string soapUrl)
+
+        public List<Mapping> returnOps(string wsdl, string soapUrl)
         {
             List<Mapping> fullMap = new List<Mapping>();
             XmlTextReader reader = new XmlTextReader(wsdl);
             ServiceDescription backEnd = ServiceDescription.Read(reader);
 
+            
+            // HACK - at the moment this is all matching on name, this probably isn't adequate!
             Binding binding = null;
 
             foreach (Binding b in backEnd.Bindings)
             {
                 foreach (ServiceDescriptionFormatExtension e in b.Extensions)
                 {
-                    if (e.GetType == typeof(Soap12Binding))
+                    if (e.GetType() == typeof(SoapBinding))
                     {
                         binding = b;
                         break;
@@ -37,8 +39,53 @@ namespace SoapToRest.Models
                 }
             }
 
+            foreach (Service s in backEnd.Services)
+            {
+                foreach (Port p in s.Ports)
+                {
+                    if (p.Binding.Name == binding.Name)
+                    {
+                        soapUrl = p.Extensions.OfType<SoapAddressBinding>().First().Location;
+                    }
+                }
+            }
 
-            foreach(PortType pt in backEnd.PortTypes)
+            foreach (OperationBinding opb in binding.Operations)
+            {
+                Mapping map = new Mapping();
+                map.Name = opb.Name;
+                map.RouteTemplate = opb.Name;
+                map.Method = "POST"; //default
+
+                string[] methods = { "GET", "POST", "PUT", "PATCH", "DELETE" };
+                foreach (var method in methods)
+                {
+                    if (map.Name.StartsWith(method, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        map.Method = method;
+                    }
+                }
+                string allParams = "";
+                List<Parameter> parameters = GetParameters(backEnd, opb.Name);
+
+                // HACK this will only work for the most simple of bodies
+                foreach (Parameter p in parameters)
+                {
+                    map.RouteTemplate = map.RouteTemplate + "/{" + p.Name + "}";
+                    allParams = allParams + "<" + p.Name + ">{" + p.Name + "}</" + p.Name + ">";
+                }
+                map.SoapBody = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body>" + allParams + "</soap:Body></soap:Envelope>";
+                
+                map.SoapAction = opb.Extensions.OfType<SoapOperationBinding>().First().SoapAction;
+                map.SoapUrl = soapUrl;
+                map.ContentType = "text/xml";
+
+                fullMap.Add(map);
+            }
+            
+
+            /*
+            foreach (PortType pt in backEnd.PortTypes)
             {
                 foreach (Operation op in pt.Operations)
                 {
@@ -69,8 +116,9 @@ namespace SoapToRest.Models
                         }
                         nextMap.RouteTemplate = "" + op.Name;
                         string allParams = "";
-                        List<Parameter> parameters = this.getParameters(backEnd, msg.Operation.Name);
-                        foreach(Parameter p in parameters){
+                        List<Parameter> parameters = this.GetParameters(backEnd, msg.Operation.Name);
+                        foreach (Parameter p in parameters)
+                        {
                             nextMap.RouteTemplate = nextMap.RouteTemplate + "/{" + p.Name + "}";
                             allParams = allParams + "<" + p.Name + ">{" + p.Name + "}</" + p.Name + ">";
                         }
@@ -78,28 +126,18 @@ namespace SoapToRest.Models
                         nextMap.SoapAction = "http://ws.cdyne.com/WeatherWS/" + nextMap.RouteTemplate;
                         nextMap.SoapUrl = soapUrl;
                         nextMap.ContentType = "text/xml";
-                        /*
-                        if (msg is OperationInput)
-                        {
-                            OperationInput oi = msg as OperationInput;
-                        }
-                        else if (msg is OperationOutput)
-                        {
-                             
-                        }
-                        else
-                        {
-                            
-                        }
-                         * */
+            
                         fullMap.Add(nextMap);
                     }
                 }
             }
+
+            */
+                
             return fullMap;
         }
 
-        public List<Parameter> getParameters(ServiceDescription serviceDescription, string messagePartName)
+        public List<Parameter> GetParameters(ServiceDescription serviceDescription, string messagePartName)
         {
             List<Parameter> parameters = new List<Parameter>();
 
