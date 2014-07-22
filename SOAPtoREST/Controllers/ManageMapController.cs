@@ -12,13 +12,11 @@ namespace SoapToRest.Controllers
     public class ManageMapController : ApiController
     {
         private MapProvider mapProvider;
-        private MappedRoute mappedRoute;
         private WsdlReader wsdlRead = new WsdlReader();
 
         public ManageMapController()
         {
             this.mapProvider = (MapProvider)System.Web.Mvc.DependencyResolver.Current.GetService(typeof(MapProvider));
-            this.mappedRoute = (MappedRoute)System.Web.Mvc.DependencyResolver.Current.GetService(typeof(MappedRoute));
         }
 
         // GET api/managemap
@@ -31,7 +29,7 @@ namespace SoapToRest.Controllers
         public void Post([FromBody] WsdlUrl data)
         {
             this.mapProvider.Mappings =  this.wsdlRead.returnOps(data.Url, "http://wsf.cdyne.com/WeatherWS/Weather.asmx");
-            this.mappedRoute.SetMappedRoutes(this.mapProvider.Mappings);
+            this.mapProvider.ApplyChanges();
         }
 
         // PUT api/managemap/5
@@ -43,11 +41,7 @@ namespace SoapToRest.Controllers
 
             // then we update the map
             this.mapProvider.Mappings = mappings;
-
-            this.mappedRoute.SetMappedRoutes(mappings);
-
-            // TODO when confident, save over original location :)
-            this.mapProvider.Save("~/map1.json");
+            this.mapProvider.ApplyChanges();
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }

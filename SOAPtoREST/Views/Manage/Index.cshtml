@@ -16,6 +16,8 @@
 
         <form role="form">
             <div ng-repeat="mapping in mappings">
+                @{ var root = Url.Content("~"); }
+                <a href="@root{{ mapping.routeTemplate }}">@root{{ mapping.routeTemplate}}</a>
                 <div class="row">
                     <label class="col-md-2">Method</label>
                     <label class="col-md-8">RouteTemplate</label>
@@ -116,7 +118,8 @@
             $scope.loading = true;
             $http({ method: 'PUT', url: '/map', data: $scope.mappings }).
             success(function (data, status, headers, config) {
-                alert('Saved (in memory, for now)')
+                // a little hacky, but it works
+                document.location.reload();
                 $scope.loading = false;
             }).
            error(function (data, status, headers, config) {
