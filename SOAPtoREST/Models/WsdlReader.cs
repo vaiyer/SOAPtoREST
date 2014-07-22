@@ -70,14 +70,24 @@ namespace SoapToRest.Models
                 if (map.Method == "GET")
                 {
                     string allParams = "";
-                    List<Parameter> parameters = GetParameters(backEnd, opb.Name);
+                    var sequence = GetParameters(backEnd, opb.Name);
 
-                    // HACK this will only work for the most simple of bodies
-                    foreach (Parameter p in parameters)
+                    if (sequence.Parameters.Count > 0)
                     {
-                        map.RouteTemplate = map.RouteTemplate + "/{" + p.Name + "}";
-                        allParams = allParams + "<" + p.Name + ">{" + p.Name + "}</" + p.Name + ">";
+                        // HACK this will only work for the most simple of bodies...\
+                        // HACK yes, using strings to manipulate XML is a bit daft but it's quick! :)
+                        foreach (Parameter p in sequence.Parameters)
+                        {
+                            map.RouteTemplate = map.RouteTemplate + "/{" + p.Name + "}";
+                            allParams = allParams + "<" + p.Name + ">{" + p.Name + "}</" + p.Name + ">";
+                        }
+
+                        allParams = String.Format("<{0} xmlns=\"{1}\">{2}</{0}>",
+                            sequence.QualifiedName.Name,
+                            sequence.QualifiedName.Namespace,
+                            allParams);
                     }
+
                     map.SoapBody = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body>" + allParams + "</soap:Body></soap:Envelope>";
                 }
 
@@ -91,9 +101,10 @@ namespace SoapToRest.Models
             return fullMap;
         }
 
-        public List<Parameter> GetParameters(ServiceDescription serviceDescription, string messagePartName)
+        public SequenceParameters GetParameters(ServiceDescription serviceDescription, string messagePartName)
         {
-            List<Parameter> parameters = new List<Parameter>();
+            SequenceParameters result = new SequenceParameters();
+            result.Parameters = new List<Parameter>();
 
             Types types = serviceDescription.Types;
             System.Xml.Schema.XmlSchema xmlSchema = types.Schemas[0];
@@ -116,13 +127,21 @@ namespace SoapToRest.Models
                                 Parameter param = new Parameter();
                                 param.Name = parameterName;
                                 param.Type = parameterType;
-                                parameters.Add(param);
+                                result.Parameters.Add(param);
+                                result.QualifiedName = element.QualifiedName;
                             }
                         }
                     }
                 }
             }
-            return parameters;
+            return result;
+        }
+
+        public class SequenceParameters
+        {
+            public XmlQualifiedName QualifiedName { get; set; }
+
+            public List<Parameter> Parameters { get; set; }
         }
     }
 }
