@@ -12,13 +12,12 @@ namespace SoapToRest.Models
 {
     public class WsdlReader
     {
-
-        public List<Mapping> returnOps(string wsdl, string soapUrl)
+        public List<Mapping> returnOps(string wsdl)
         {
+            string soapUrl = null;
             List<Mapping> fullMap = new List<Mapping>();
             XmlTextReader reader = new XmlTextReader(wsdl);
             ServiceDescription backEnd = ServiceDescription.Read(reader);
-
             
             // HACK - at the moment this is all matching on name, this probably isn't adequate!
             Binding binding = null;
@@ -39,6 +38,7 @@ namespace SoapToRest.Models
                 }
             }
 
+            // Find Service URL
             foreach (Service s in backEnd.Services)
             {
                 foreach (Port p in s.Ports)
@@ -50,6 +50,7 @@ namespace SoapToRest.Models
                 }
             }
 
+            // Find Operation Binding
             foreach (OperationBinding opb in binding.Operations)
             {
                 Mapping map = new Mapping();
@@ -82,7 +83,6 @@ namespace SoapToRest.Models
 
                 fullMap.Add(map);
             }
-            
 
             /*
             foreach (PortType pt in backEnd.PortTypes)
