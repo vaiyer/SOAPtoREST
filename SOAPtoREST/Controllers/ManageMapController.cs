@@ -28,7 +28,7 @@ namespace SoapToRest.Controllers
 
         public void Post([FromBody] WsdlUrl data)
         {
-            this.mapProvider.Mappings =  this.wsdlRead.returnOps(data.Url, "http://wsf.cdyne.com/WeatherWS/Weather.asmx");
+            this.mapProvider.Mappings =  this.wsdlRead.returnOps(data.Url);
             this.mapProvider.ApplyChanges();
         }
 
