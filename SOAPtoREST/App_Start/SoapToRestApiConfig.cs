@@ -17,12 +17,21 @@ namespace SoapToRest
             // Dependencies are incorrectly ordered here. Why is this class orchestrating 
             // between mp and mrp?
             MapProvider mp = DependencyResolver.Current.GetService<MapProvider>();
-            MappedRoute mrp = DependencyResolver.Current.GetService<MappedRoute>();
 
-            mrp.SetMappedRoutes(mp.Mappings);
-
-            config.Routes.Add("MappedRouteProviderRoute", mrp);
+            foreach (var map in mp.Mappings)
+            {
+                config.Routes.MapHttpRoute(
+                    name: map.RouteTemplate,
+                    routeTemplate: map.RouteTemplate,
+                    defaults: new
+                    {
+                        controller = "SoapRest",
+                        action = "Handler",
+                        id = UrlParameter.Optional,
+                        routeTemplate = map.RouteTemplate,
+                    },
+                    constraints: new { httpMethod = new HttpMethodConstraint(new HttpMethod(map.Method)) });
+            }
         }
-
     }
 }

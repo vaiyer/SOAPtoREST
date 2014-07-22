@@ -11,6 +11,8 @@ namespace SoapToRest.Models
 {
     public class MapProvider
     {
+        private string path;
+
         public MapProvider()
         {
             this.Mappings = new List<Mapping>();
@@ -18,7 +20,8 @@ namespace SoapToRest.Models
 
         public MapProvider(string path)
         {
-            var file = HostingEnvironment.MapPath(path);
+            this.path = HostingEnvironment.MapPath(path);
+            var file = this.path;
             var fileJson = File.ReadAllText(file);
             SoapMap map = JsonConvert.DeserializeObject<SoapMap>(fileJson);
             this.Mappings = map.Mappings;
@@ -26,11 +29,17 @@ namespace SoapToRest.Models
 
         public void Save(string path)
         {
-            var json = JsonConvert.SerializeObject(new SoapMap() { Mappings = this.Mappings });
-            File.WriteAllText(HostingEnvironment.MapPath(path), json);
+            var json = JsonConvert.SerializeObject(new SoapMap() { Mappings = this.Mappings });;
+            File.WriteAllText(this.path, json);
         }
 
         public List<Mapping> Mappings;
 
+        public void ApplyChanges()
+        {
+            this.Save(this.path);
+            // HACK Touch web.config to restart the app domain
+            File.SetLastWriteTimeUtc(HostingEnvironment.MapPath(@"~/web.config"), DateTime.UtcNow);
+        }
     }
 }
