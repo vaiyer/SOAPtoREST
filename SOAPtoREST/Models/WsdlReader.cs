@@ -18,6 +18,26 @@ namespace SoapToRest.Models
             List<Mapping> fullMap = new List<Mapping>();
             XmlTextReader reader = new XmlTextReader(wsdl);
             ServiceDescription backEnd = ServiceDescription.Read(reader);
+
+            Binding binding = null;
+
+            foreach (Binding b in backEnd.Bindings)
+            {
+                foreach (ServiceDescriptionFormatExtension e in b.Extensions)
+                {
+                    if (e.GetType == typeof(Soap12Binding))
+                    {
+                        binding = b;
+                        break;
+                    }
+                }
+                if (binding != null)
+                {
+                    break;
+                }
+            }
+
+
             foreach(PortType pt in backEnd.PortTypes)
             {
                 foreach (Operation op in pt.Operations)
