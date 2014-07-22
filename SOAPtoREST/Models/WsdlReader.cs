@@ -66,17 +66,20 @@ namespace SoapToRest.Models
                         map.Method = method;
                     }
                 }
-                string allParams = "";
-                List<Parameter> parameters = GetParameters(backEnd, opb.Name);
 
-                // HACK this will only work for the most simple of bodies
-                foreach (Parameter p in parameters)
+                if (map.Method == "GET")
                 {
-                    map.RouteTemplate = map.RouteTemplate + "/{" + p.Name + "}";
-                    allParams = allParams + "<" + p.Name + ">{" + p.Name + "}</" + p.Name + ">";
+                    string allParams = "";
+                    List<Parameter> parameters = GetParameters(backEnd, opb.Name);
+
+                    // HACK this will only work for the most simple of bodies
+                    foreach (Parameter p in parameters)
+                    {
+                        map.RouteTemplate = map.RouteTemplate + "/{" + p.Name + "}";
+                        allParams = allParams + "<" + p.Name + ">{" + p.Name + "}</" + p.Name + ">";
+                    }
+                    map.SoapBody = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body>" + allParams + "</soap:Body></soap:Envelope>";
                 }
-                map.SoapBody = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body>" + allParams + "</soap:Body></soap:Envelope>";
-                
                 map.SoapAction = opb.Extensions.OfType<SoapOperationBinding>().First().SoapAction;
                 map.SoapUrl = soapUrl;
                 map.ContentType = "text/xml";
