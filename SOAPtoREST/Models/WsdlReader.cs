@@ -26,8 +26,8 @@ namespace SoapToRest.Models
                     {
                         Mapping nextMap = new Mapping();
                         nextMap.Name = op.ToString();
-                        nextMap.Method = "GET";
-                        if (op.ToString().Contains("get"))
+                        nextMap.Method = "POST";
+                        if (op.ToString().Contains("get") || op.ToString().Contains("Get") || op.ToString().Contains("GET"))
                         {
                             nextMap.Method = "GET";
                         }
