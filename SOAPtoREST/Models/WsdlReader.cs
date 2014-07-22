@@ -12,93 +12,99 @@ namespace SoapToRest.Models
 {
     public class WsdlReader
     {
-        
-        public List<Mapping> returnOps (string wsdl, string soapUrl)
+        public List<Mapping> returnOps(string wsdl)
         {
+            string soapUrl = null;
             List<Mapping> fullMap = new List<Mapping>();
             XmlTextReader reader = new XmlTextReader(wsdl);
             ServiceDescription backEnd = ServiceDescription.Read(reader);
-            /*
-            foreach (Binding bdg in backEnd.Bindings)
+
+            // HACK - at the moment this is all matching on name, this probably isn't adequate!
+            Binding binding = null;
+
+            foreach (Binding b in backEnd.Bindings)
             {
-                var ext = bdg.Extensions.OfType<Soap12Binding>().FirstOrDefault();
-                if (ext == null)
+                foreach (ServiceDescriptionFormatExtension e in b.Extensions)
                 {
-                    throw new NullReferenceException();
-                }
-                foreach (Operation ops in bdg.Operations)
-                {
-                    Mapping nextMap = new Mapping();
-                    nextMap.Name = ops.Name;
-                    nextMap.SoapAction = ops.
-                }
-                
-            }
-            */
-            foreach(PortType pt in backEnd.PortTypes)
-            {
-                foreach (Operation op in pt.Operations)
-                {
-                    foreach (OperationMessage msg in op.Messages)
+                    if (e.GetType() == typeof(SoapBinding))
                     {
-                        Mapping nextMap = new Mapping();
-                        nextMap.Name = op.ToString();
-                        nextMap.Method = "POST";
-                        if (op.ToString().Contains("get") || op.ToString().Contains("Get") || op.ToString().Contains("GET"))
-                        {
-                            nextMap.Method = "GET";
-                        }
-                        else if (op.ToString().Contains("post") || op.ToString().Contains("Post") || op.ToString().Contains("POST"))
-                        {
-                            nextMap.Method = "POST";
-                        }
-                        else if (op.ToString().Contains("put") || op.ToString().Contains("Put") || op.ToString().Contains("PUT"))
-                        {
-                            nextMap.Method = "PUT";
-                        }
-                        else if (op.ToString().Contains("patch") || op.ToString().Contains("Patch") || op.ToString().Contains("PATCH"))
-                        {
-                            nextMap.Method = "PATCH";
-                        }
-                        else if (op.ToString().Contains("delete") || op.ToString().Contains("Delete") || op.ToString().Contains("DELETE"))
-                        {
-                            nextMap.Method = "DELETE";
-                        }
-                        nextMap.RouteTemplate = "" + op.Name;
-                        string allParams = "";
-                        List<Parameter> parameters = this.getParameters(backEnd, msg.Operation.Name);
-                        foreach(Parameter p in parameters){
-                            nextMap.RouteTemplate = nextMap.RouteTemplate + "/{" + p.Name + "}";
-                            allParams = allParams + "<" + p.Name + ">{" + p.Name + "}</" + p.Name + ">";
-                        }
-                        nextMap.SoapBody = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body>" + allParams + "</soap:Body></soap:Envelope>";
-                        nextMap.SoapAction = "http://ws.cdyne.com/WeatherWS/" + nextMap.RouteTemplate;
-                        nextMap.SoapUrl = soapUrl;
-                        nextMap.ContentType = "text/xml";
-                        /*
-                        if (msg is OperationInput)
-                        {
-                            OperationInput oi = msg as OperationInput;
-                        }
-                        else if (msg is OperationOutput)
-                        {
-                             
-                        }
-                        else
-                        {
-                            
-                        }
-                         * */
-                        fullMap.Add(nextMap);
+                        binding = b;
+                        break;
+                    }
+                }
+                if (binding != null)
+                {
+                    break;
+                }
+            }
+
+            // Find Service URL
+            foreach (Service s in backEnd.Services)
+            {
+                foreach (Port p in s.Ports)
+                {
+                    if (p.Binding.Name == binding.Name)
+                    {
+                        soapUrl = p.Extensions.OfType<SoapAddressBinding>().First().Location;
                     }
                 }
             }
+
+            // Find Operation Binding
+            foreach (OperationBinding opb in binding.Operations)
+            {
+                Mapping map = new Mapping();
+                map.Name = opb.Name;
+                map.RouteTemplate = opb.Name;
+                map.Method = "POST"; //default
+
+                string[] methods = { "GET", "POST", "PUT", "PATCH", "DELETE" };
+                foreach (var method in methods)
+                {
+                    if (map.Name.StartsWith(method, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        map.Method = method;
+                    }
+                }
+
+                if (map.Method == "GET")
+                {
+                    string allParams = "";
+                    var sequence = GetParameters(backEnd, opb.Name);
+
+                    if (sequence.Parameters.Count > 0)
+                    {
+                        // HACK this will only work for the most simple of bodies...\
+                        // HACK yes, using strings to manipulate XML is a bit daft but it's quick! :)
+                        foreach (Parameter p in sequence.Parameters)
+                        {
+                            map.RouteTemplate = map.RouteTemplate + "/{" + p.Name + "}";
+                            allParams = allParams + "<" + p.Name + ">{" + p.Name + "}</" + p.Name + ">";
+                        }
+
+                        allParams = String.Format("<{0} xmlns=\"{1}\">{2}</{0}>",
+                            sequence.QualifiedName.Name,
+                            sequence.QualifiedName.Namespace,
+                            allParams);
+                    }
+
+                    map.SoapBody = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body>" + allParams + "</soap:Body></soap:Envelope>";
+                }
+
+                map.SoapAction = opb.Extensions.OfType<SoapOperationBinding>().First().SoapAction;
+                map.SoapUrl = soapUrl;
+                map.ContentType = "text/xml";
+
+                fullMap.Add(map);
+            }
+
             return fullMap;
         }
 
-        public List<Parameter> getParameters(ServiceDescription serviceDescription, string messagePartName)
+        public SequenceParameters GetParameters(ServiceDescription serviceDescription, string messagePartName)
         {
-            List<Parameter> parameters = new List<Parameter>();
+            SequenceParameters result = new SequenceParameters();
+            result.Parameters = new List<Parameter>();
 
             Types types = serviceDescription.Types;
             System.Xml.Schema.XmlSchema xmlSchema = types.Schemas[0];
@@ -121,13 +127,21 @@ namespace SoapToRest.Models
                                 Parameter param = new Parameter();
                                 param.Name = parameterName;
                                 param.Type = parameterType;
-                                parameters.Add(param);
+                                result.Parameters.Add(param);
+                                result.QualifiedName = element.QualifiedName;
                             }
                         }
                     }
                 }
             }
-            return parameters;
+            return result;
+        }
+
+        public class SequenceParameters
+        {
+            public XmlQualifiedName QualifiedName { get; set; }
+
+            public List<Parameter> Parameters { get; set; }
         }
     }
 }

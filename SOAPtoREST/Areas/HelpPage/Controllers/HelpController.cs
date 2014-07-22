@@ -1,7 +1,10 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
+using System.Linq;
 using SoapToRest.Areas.HelpPage.Models;
+using System.Collections.ObjectModel;
+using System.Web.Http.Description;
 
 namespace SoapToRest.Areas.HelpPage.Controllers
 {
@@ -25,7 +28,8 @@ namespace SoapToRest.Areas.HelpPage.Controllers
         public ActionResult Index()
         {
             ViewBag.DocumentationProvider = Configuration.Services.GetDocumentationProvider();
-            return View(Configuration.Services.GetApiExplorer().ApiDescriptions);
+            var apid = Configuration.Services.GetApiExplorer().ApiDescriptions.Where(a => !String.Equals(a.Route.Defaults["controller"] as string, "ManageMap")).ToList();
+            return View(new Collection<ApiDescription>(apid));
         }
 
         public ActionResult Api(string apiId)
