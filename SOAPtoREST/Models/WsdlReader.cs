@@ -31,6 +31,11 @@ namespace SoapToRest.Models
                         binding = b;
                         break;
                     }
+                    else if (e.GetType() == typeof(SoapBinding))
+                    {
+                        binding = b;
+                        break;
+                    }
                 }
                 if (binding != null)
                 {

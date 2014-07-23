@@ -3,21 +3,71 @@
     ViewBag.Title = "Manage";
 }
 
-<h2>Manage</h2>
+<h2><table><tr><td>Manage</td></tr></table></h2>
 <div ng-app="manageApp" class="container">
     <div ng-controller="manageController">
-        <div class="jumbotron">
-            <h1>Import WSDL</h1>
-            <p>Enter WSDL URL:</p>
+        <div class="container">
+            <h3>
             <form role="form">
-                <input type="text" ng-model="wsdlUrl" placeholder="Enter WSDL URL here" /> <button ng-click="readWsdl()">Load WSDL</button>
+                <input type="text" ng-model="wsdlUrl" placeholder="Enter WSDL URL here" height="20%"/> <button ng-click="readWsdl()">Load WSDL</button>
             </form>
+                </h3>
         </div>
 
         <form role="form">
-            <div ng-repeat="mapping in mappings">
+            <div ng-repeat="mapping in mappings" class="badge">
                 @{ var root = Url.Content("~"); }
                 <a href="@root{{ mapping.routeTemplate }}">@root{{ mapping.routeTemplate}}</a>
+                
+                <table width="100%">
+                    <tr>
+                        <td>
+                        <label>Method</label>
+                        </td>
+                        <td>
+                        <label>Route Template</label>
+                        </td>
+                        <td>
+                            <label>SOAP URL</label>
+                        </td>
+                        <td>
+                            <label>SOAP Action</label>
+                        </td>
+                        <td>
+                            <label>Content Type</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" ng-model="mapping.method" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" ng-model="mapping.routeTemplate" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" ng-model="mapping.soapUrl" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" ng-model="mapping.soapAction " />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" ng-model="mapping.contentType" />
+                        </td>
+                    </tr>
+                </table>
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <label>SOAP Body</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <textarea class="form-control" rows="4" ng-model="mapping.soapBody"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <!--
                 <div class="row">
                     <label class="col-md-2">Method</label>
                     <label class="col-md-8">RouteTemplate</label>
@@ -53,7 +103,7 @@
                     <div class="col">
                         <textarea class="form-control" rows="4" ng-model="mapping.soapBody"></textarea>
                     </div>
-                </div>
+                </div>-->
                 <p>&nbsp;</p>
             </div>
         </form>
