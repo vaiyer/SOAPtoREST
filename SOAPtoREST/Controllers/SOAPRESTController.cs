@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Xml;
+using System.Xml.XPath;
+using System.Xml.Linq;
 
 namespace SoapToRest.Controllers
 {
@@ -77,7 +79,24 @@ namespace SoapToRest.Controllers
                         }
                     };
 
-                    return outgoingResponse;
+                    dynamic respContent = await outgoingResponse.Content.ReadAsStringAsync();
+                    string xml = respContent;
+                    var x = XElement.Parse(xml);
+                    var child = x.XPathSelectElement("./*/*");
+
+                    HttpResponseMessage finalResponse = new HttpResponseMessage();
+
+                    var finalResponseFinal = new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = new StringContent(child.ToString())
+                        {
+                            Headers =
+                            {
+                                ContentType = new MediaTypeHeaderValue(contentType)
+                            }
+                        }
+                    };
+                    return finalResponseFinal;
                 }
             }
         }
