@@ -36,6 +36,11 @@
                         <td>
                             <label>Content Type</label>
                         </td>
+                        <td>
+                            <button ng-click="deleteItem(mapping)">
+                                X
+                            </button>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -104,10 +109,10 @@
                         <textarea class="form-control" rows="4" ng-model="mapping.soapBody"></textarea>
                     </div>
                 </div>-->
-                <p>&nbsp;</p>
-            </div>
-        </form>
 
+            </div>
+            <p>&nbsp;</p>
+        </form>
         <div>
             <button ng-click="newMap()">Add new map</button>
             <button ng-click="saveMappings()" class="btn-primary">Save changes</button>
@@ -159,6 +164,13 @@
                 });
             
         }
+
+        $scope.deleteItem = function (model) {
+            var i = $scope.mappings.indexOf(model);
+            $scope.mappings.splice(i, 1);
+            $scope.$apply();
+        }
+
 
         $scope.newMap = function () {
             $scope.mappings.push({});
